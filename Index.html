@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpeakUp — Master Received Pronunciation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F9F5EE;
+    --warm-white: #FEFCF8;
+    --ink: #1A1610;
+    --ink-muted: #5C4F3A;
+    --ink-light: #9C8E7A;
+    --gold: #C8973A;
+    --gold-light: #EDD898;
+    --gold-pale: #FAF3DE;
+    --british-green: #2D5016;
+    --british-green-light: #4A7A27;
+    --red-accent: #B03030;
+    --border: rgba(28,20,10,0.12);
+    --shadow: 0 2px 20px rgba(28,20,10,0.08);
+    --shadow-md: 0 8px 40px rgba(28,20,10,0.12);
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-crown {
+    width: 32px;
+    height: 32px;
+  }
+  .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .nav-subtitle {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .nav-tab {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--ink-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-tab:hover { background: var(--cream); color: var(--ink); }
+  .nav-tab.active { background: var(--gold-pale); color: var(--gold); }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold-pale);
+    color: var(--gold);
+    border: 1px solid var(--gold-light);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p {
+    color: var(--ink-muted);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    display: block;
+  }
+  .stat-label { font-size: 12px; color: var(--ink-light); letter-spacing: 0.05em; }
+
+  /* MAIN LAYOUT */
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+  /* PRACTICE CARD */
+  .card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.25rem;
+  }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--gold-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  /* PHRASES */
+  .phrase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .phrase-btn {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .phrase-btn:hover { border-color: var(--gold); background: var(--gold-pale); }
+  .phrase-btn.selected { border-color: var(--gold); background: var(--gold-pale); }
+  .phrase-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 4px;
+    font-family: 'Playfair Display', serif;
+  }
+  .phrase-phonetic {
+    font-size: 11px;
+    color: var(--ink-light);
+    display: block;
+  }
+  .phrase-category {
+    display: inline-block;
+    font-size: 10px;
+    background: var(--gold-pale);
+    color: var(--gold);
+    border: 1px solid var(--gold-light);
+    border-radius: 4px;
+    padding: 2px 7px;
+    margin-top: 6px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* CURRENT PHRASE DISPLAY */
+  .current-phrase-box {
+    background: var(--cream);
+    border: 1.5px dashed var(--gold-light);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+  .current-phrase-box .phrase-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .current-phrase-box .phrase-ipa {
+    font-size: 15px;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .current-phrase-box .phrase-tip {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  /* RECORDER */
+  .recorder-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .record-btn {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid var(--red-accent);
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 0 rgba(176,48,48,0.3);
+  }
+  .record-btn:hover { transform: scale(1.05); }
+  .record-btn.recording {
+    background: var(--red-accent);
+    animation: pulse-ring 1.2s infinite;
+  }
+  .record-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--red-accent);
+    transition: all 0.2s;
+  }
+  .record-btn.recording .record-dot {
+    background: white;
+    border-radius: 4px;
+    width: 22px;
+    height: 22px;
+  }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(176,48,48,0.4); }
+    70% { box-shadow: 0 0 0 16px rgba(176,48,48,0); }
+    100% { box-shadow: 0 0 0 0 rgba(176,48,48,0); }
+  }
+  .rec-label {
+    font-size: 13px;
+    color: var(--ink-muted);
+    text-align: center;
+    margin-top: 6px;
+  }
+  .timer-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--ink);
+    min-width: 60px;
+    text-align: center;
+  }
+  .action-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--warm-white);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .action-btn:hover { background: var(--cream); }
+  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .action-btn.primary {
+    background: var(--british-green);
+    color: white;
+    border-color: var(--british-green);
+  }
+  .action-btn.primary:hover { background: var(--british-green-light); }
+
+  /* WAVEFORM */
+  .waveform-container {
+    background: var(--cream);
+    border-radius: 8px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .wave-bar {
+    width: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: height 0.1s;
+    min-height: 4px;
+  }
+
+  /* RECORDINGS LIST */
+  .recordings-list { display: flex; flex-direction: column; gap: 10px; }
+  .recording-item {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    box-shadow: var(--shadow);
+  }
+  .recording-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+  .recording-phrase {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .recording-meta {
+    font-size: 12px;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+  .recording-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--cream);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 16px;
+  }
+  .icon-btn:hover { background: var(--gold-pale); border-color: var(--gold); }
+  .icon-btn.danger:hover { background: #FDEAEA; border-color: var(--red-accent); }
+
+  /* SCORE BADGE */
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .score-badge.excellent { background: #EAF4DE; color: #2D6A0F; }
+  .score-badge.good { background: var(--gold-pale); color: #8A6010; }
+  .score-badge.needs-work { background: #FDEAEA; color: var(--red-accent); }
+
+  /* FEEDBACK PANEL */
+  .feedback-panel {
+    background: var(--cream);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 10px;
+  }
+  .feedback-panel h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .feedback-text {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .tip-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 8px;
+  }
+  .tip-list li {
+    font-size: 13px;
+    color: var(--ink-muted);
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .tip-list li::before {
+    content: '→';
+    color: var(--gold);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--ink-light);
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 1rem; }
+  .empty-state h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+
+  /* PROGRESS */
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .progress-stat {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .progress-stat .big-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--ink);
+    display: block;
+  }
+  .progress-stat .big-unit { font-size: 18px; color: var(--gold); }
+  .progress-stat .stat-name {
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-top: 4px;
+  }
+
+  /* RP GUIDE */
+  .guide-sections { display: flex; flex-direction: column; gap: 16px; }
+  .guide-section {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .guide-section-header {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    background: var(--warm-white);
+    transition: background 0.2s;
+  }
+  .guide-section-header:hover { background: var(--cream); }
+  .guide-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .guide-section-body {
+    padding: 0 1.5rem 1.5rem;
+    display: none;
+  }
+  .guide-section-body.open { display: block; }
+  .sound-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .sound-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .sound-symbol {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .sound-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .sound-example { font-size: 12px; color: var(--ink-muted); font-style: italic; }
+  .sound-tip { font-size: 11px; color: var(--british-green); margin-top: 6px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--ink);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* STATUS BAR */
+  .status-bar {
+    background: var(--british-green);
+    color: white;
+    font-size: 13px;
+    padding: 8px 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #90EE90;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* LOADING OVERLAY */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(249,245,238,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .loading-overlay.show { display: flex; }
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--ink-muted);
+  }
+
+  @media (max-width: 600px) {
+    .hero-stats { gap: 1.5rem; }
+    .nav-tabs { gap: 2px; }
+    .nav-tab { padding: 6px 10px; font-size: 13px; }
+    .phrase-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <svg class="nav-crown" viewBox="0 0 32 32" fill="none">
+      <path d="M5 24h22M8 24l-2-12 6 6 4-10 4 10 6-6-2 12H8z" stroke="#C8973A" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+      <circle cx="5" cy="11" r="2" fill="#C8973A"/>
+      <circle cx="16" cy="8" r="2" fill="#C8973A"/>
+      <circle cx="27" cy="11" r="2" fill="#C8973A"/>
+    </svg>
+    <div>
+      <div class="nav-title">SpeakUp</div>
+      <div class="nav-subtitle">Received Pronunciation</div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('practice')">Practice</button>
+    <button class="nav-tab" onclick="showPage('recordings')">Recordings</button>
+    <button class="nav-tab" onclick="showPage('progress')">Progress</button>
+    <button class="nav-tab" onclick="showPage('guide')">RP Guide</button>
+  </div>
+</nav>
+
+<!-- PAGES -->
+
+<!-- PRACTICE PAGE -->
+<div id="page-practice" class="page active">
+  <div class="hero">
+    <div class="hero-badge">SpeakUp — British RP Accent Trainer</div>
+    <h1>Speak with <span>Received</span> Pronunciation</h1>
+    <p>Record yourself speaking, get instant AI feedback, and track your progress towards a polished British RP accent.</p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num" id="stat-sessions">0</span>
+        <span class="stat-label">sessions recorded</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" id="stat-phrases">12</span>
+        <span class="stat-label">practice phrases</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" id="stat-avg">—</span>
+        <span class="stat-label">avg. score</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- PHRASE SELECTOR -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 6h14M3 10h10M3 14h6" stroke="#C8973A" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-title">Choose a Practice Phrase</div>
+          <div class="card-desc">Select a phrase to practise. Each targets key RP sounds.</div>
+        </div>
+      </div>
+      <div class="phrase-grid" id="phraseGrid"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="action-btn" onclick="pickRandomPhrase()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8z" stroke="#5C4F3A" stroke-width="1.5"/><path d="M8 5v3l2 2" stroke="#5C4F3A" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Random Phrase
+        </button>
+        <button class="action-btn" onclick="showCustomInput()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 12L4 4l4 6 4-6 2 8" stroke="#5C4F3A" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          Type My Own
+        </button>
+      </div>
+      <div id="customInputArea" style="display:none;margin-top:12px;">
+        <input type="text" id="customPhraseInput" placeholder="Type any sentence to practise..." 
+          style="width:100%;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:15px;background:var(--cream);outline:none;color:var(--ink)">
+        <button class="action-btn primary" style="margin-top:8px" onclick="useCustomPhrase()">Use This Phrase</button>
+      </div>
+    </div>
+
+    <!-- CURRENT PHRASE + RECORDER -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect x="7" y="2" width="6" height="11" rx="3" stroke="#C8973A" stroke-width="1.8"/>
+            <path d="M4 10a6 6 0 0 0 12 0M10 16v2M7 18h6" stroke="#C8973A" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-title">Record Your Voice</div>
+          <div class="card-desc">Press the red button to start recording</div>
+        </div>
+      </div>
+
+      <div class="current-phrase-box" id="currentPhraseDisplay">
+        <div class="phrase-main">Please select a phrase above</div>
+        <div class="phrase-ipa" id="currentIPA"></div>
+        <div class="phrase-tip" id="currentTip"></div>
+      </div>
+
+      <div class="waveform-container" id="waveform">
+        <div style="color:var(--ink-light);font-size:13px;">Press record to begin</div>
+      </div>
+
+      <div class="recorder-controls">
+        <div>
+          <button class="record-btn" id="recordBtn" onclick="toggleRecording()">
+            <div class="record-dot"></div>
+          </button>
+          <div class="rec-label" id="recLabel">Tap to record</div>
+        </div>
+        <div class="timer-display" id="timerDisplay">0:00</div>
+        <button class="action-btn" id="playBtn" onclick="playRecording()" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 3l8 5-8 5V3z" fill="#5C4F3A"/></svg>
+          Play Back
+        </button>
+        <button class="action-btn primary" id="analyzeBtn" onclick="analyzeRecording()" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 10l4-4 3 3 5-6" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Get Feedback
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- RECORDINGS PAGE -->
+<div id="page-recordings" class="page">
+  <div style="background:var(--warm-white);border-bottom:1px solid var(--border);padding:2rem 2rem 1.5rem">
+    <h2 style="font-family:'Playfair Display',serif;font-size:28px;margin-bottom:6px">Your Recordings</h2>
+    <p style="color:var(--ink-muted);font-size:15px">Review and listen to all your practice sessions</p>
+  </div>
+  <div class="container">
+    <div id="recordingsList">
+      <div class="empty-state">
+        <div class="empty-icon">🎙</div>
+        <h3>No recordings yet</h3>
+        <p style="font-size:14px">Head to the Practice tab to record your first session</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS PAGE -->
+<div id="page-progress" class="page">
+  <div style="background:var(--warm-white);border-bottom:1px solid var(--border);padding:2rem 2rem 1.5rem">
+    <h2 style="font-family:'Playfair Display',serif;font-size:28px;margin-bottom:6px">Your Progress</h2>
+    <p style="color:var(--ink-muted);font-size:15px">Track your journey towards RP mastery</p>
+  </div>
+  <div class="container">
+    <div class="progress-grid" id="progressStats"></div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:1rem;font-family:'Playfair Display',serif;font-size:18px">Recent Activity</div>
+      <div id="activityLog">
+        <div style="color:var(--ink-light);font-size:14px;padding:1rem 0">Start recording to see your activity here.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:0.5rem;font-family:'Playfair Display',serif;font-size:18px">RP Achievement Badges</div>
+      <div style="color:var(--ink-muted);font-size:13px;margin-bottom:1.25rem">Earn badges as you practice</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px" id="badgeGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- RP GUIDE PAGE -->
+<div id="page-guide" class="page">
+  <div style="background:var(--warm-white);border-bottom:1px solid var(--border);padding:2rem 2rem 1.5rem">
+    <h2 style="font-family:'Playfair Display',serif;font-size:28px;margin-bottom:6px">RP Pronunciation Guide</h2>
+    <p style="color:var(--ink-muted);font-size:15px">Master the sounds of Received Pronunciation</p>
+  </div>
+  <div class="container">
+    <div class="guide-sections" id="guideSections"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Analysing your pronunciation...</div>
+</div>
+
+<script>
+// ========== DATA ==========
+const PHRASES = [
+  { text: "How now, brown cow", ipa: "/haʊ naʊ braʊn kaʊ/", tip: "Focus on the 'ow' diphthong — your mouth should move from open to rounded.", category: "Vowels" },
+  { text: "The rain in Spain stays mainly in the plain", ipa: "/ðə reɪn ɪn speɪn/", tip: "The 'a' in 'rain' and 'plain' is a pure /eɪ/ diphthong — not a flat sound.", category: "Vowels" },
+  { text: "Rather and father", ipa: "/ˈrɑːðə/ /ˈfɑːðə/", tip: "Use the broad /ɑː/ vowel — long and open, never the short 'a' of 'cat'.", category: "RP Vowels" },
+  { text: "Bath, dance, chance, path", ipa: "/bɑːθ/ /dɑːns/ /tʃɑːns/", tip: "These all use /ɑː/ in RP — the TRAP-BATH split is a key RP feature.", category: "RP Vowels" },
+  { text: "The butler didn't do it", ipa: "/ðə ˈbʌtlə ˈdɪdnt duː ɪt/", tip: "Non-rhotic RP: drop the 'r' before consonants. 'Butler' ends in schwa /ə/.", category: "Non-Rhotic" },
+  { text: "Water, better, butter", ipa: "/ˈwɔːtə/ /ˈbɛtə/ /ˈbʌtə/", tip: "Final 'er' becomes /ə/ (schwa). Never pronounce the final R in RP.", category: "Non-Rhotic" },
+  { text: "Good morning, how do you do", ipa: "/ɡʊd ˈmɔːnɪŋ haʊ də jʊ ˈduː/", tip: "Classic RP greeting — maintain the crisp /ɔː/ in 'morning'.", category: "Greetings" },
+  { text: "I rather think not", ipa: "/aɪ ˈrɑːðə θɪŋk nɒt/", tip: "The /ɒ/ in 'not' is rounded and short — not like American 'naht'.", category: "Phrases" },
+  { text: "Peculiarly particular", ipa: "/pɪˈkjuːlɪəlɪ pəˈtɪkjʊlə/", tip: "Clear articulation of each syllable is key. Avoid swallowing sounds.", category: "Clarity" },
+  { text: "Three free throws", ipa: "/θriː friː θrəʊz/", tip: "Ensure clean /θ/ — tongue tip gently between teeth, not an 'f' sound.", category: "Consonants" },
+  { text: "Little bottle of red wine", ipa: "/ˈlɪtl ˈbɒtl əv rɛd waɪn/", tip: "Clear /t/ sounds — don't turn them into 'd' or glottal stops.", category: "Consonants" },
+  { text: "Properly British", ipa: "/ˈprɒpəlɪ ˈbrɪtɪʃ/", tip: "Avoid the 'intrusive r' — 'properly' ends with schwa before 'British'.", category: "Classic" }
+];
+
+const RP_GUIDE = [
+  {
+    title: "The TRAP-BATH Split — A Key RP Feature",
+    body: `In RP, certain words use /ɑː/ where other accents use /æ/. This is often the first thing people notice about an RP accent.`,
+    sounds: [
+      { sym: "/æ/", name: "TRAP vowel", ex: "cat, man, hand, flat", tip: "Short, front of mouth — 'trap' a vowel in your cat" },
+      { sym: "/ɑː/", name: "BATH vowel", ex: "bath, grass, pass, ask", tip: "Long, back of throat — like 'ahh' at the doctor" },
+    ]
+  },
+  {
+    title: "Non-Rhotic — Don't Pronounce Final R",
+    body: `RP is non-rhotic, meaning the letter 'r' is only pronounced before a vowel. After a vowel or at the end of a word, it disappears and becomes a schwa.`,
+    sounds: [
+      { sym: "/ə/", name: "Schwa (replaces R)", ex: "butter, water, better", tip: "Unstressed neutral vowel — the most common sound in English" },
+      { sym: "/ɪə/", name: "NEAR diphthong", ex: "beer, here, ear, fear", tip: "Two sounds: /ɪ/ gliding into /ə/" },
+      { sym: "/ʊə/", name: "CURE diphthong", ex: "pure, cure, sure, tour", tip: "/ʊ/ gliding into /ə/ — many RP speakers use /ɔː/" },
+    ]
+  },
+  {
+    title: "Pure RP Vowels",
+    body: `RP has a rich vowel system with many pure sounds (monophthongs) that are held steady without movement.`,
+    sounds: [
+      { sym: "/ɒ/", name: "LOT vowel", ex: "not, hot, dog, gone", tip: "Rounded, back — lips form an 'o' shape" },
+      { sym: "/ɔː/", name: "THOUGHT vowel", ex: "law, all, thought, war", tip: "Long, rounded — like /ɒ/ but held longer" },
+      { sym: "/ɜː/", name: "NURSE vowel", ex: "bird, word, fur, stir", tip: "Long, central — lips unrounded, middle of mouth" },
+      { sym: "/uː/", name: "GOOSE vowel", ex: "moon, food, blue, true", tip: "Long, back, rounded — but in RP starts slightly forward" },
+    ]
+  },
+  {
+    title: "Crisp Consonants",
+    body: `RP consonants are precisely articulated. Avoid dropping sounds or blurring them together.`,
+    sounds: [
+      { sym: "/t/", name: "Clear T", ex: "butter, battle, water", tip: "Use a crisp alveolar /t/ — avoid the American flap or glottal stop" },
+      { sym: "/θ/", name: "TH sound", ex: "think, three, bath", tip: "Tongue tip between teeth — breathe out gently" },
+      { sym: "/ð/", name: "Voiced TH", ex: "the, this, father", tip: "Same as /θ/ but voice is on — vibrate the throat" },
+      { sym: "/h/", name: "H sound", ex: "house, have, here", tip: "Always pronounce H at the start of words in RP" },
+    ]
+  },
+  {
+    title: "RP Diphthongs — Moving Vowels",
+    body: `Diphthongs are sounds that glide from one vowel position to another. RP has many and they are key to the accent's character.`,
+    sounds: [
+      { sym: "/eɪ/", name: "FACE diphthong", ex: "make, day, rain, they", tip: "Starts at /e/, glides up to /ɪ/ — a smooth movement" },
+      { sym: "/əʊ/", name: "GOAT diphthong", ex: "go, home, coat, know", tip: "Starts at schwa /ə/, rounds to /ʊ/ — very characteristic of RP" },
+      { sym: "/aɪ/", name: "PRICE diphthong", ex: "time, like, high, by", tip: "Open /a/ glides to /ɪ/ — starts quite open in RP" },
+      { sym: "/aʊ/", name: "MOUTH diphthong", ex: "how, now, town, house", tip: "Open /a/ glides to /ʊ/ — keep the start sound open" },
+    ]
+  }
+];
+
+const FEEDBACK_RESPONSES = [
+  { score: 92, grade: "excellent", text: "Excellent work! Your vowel sounds are very well produced. The /ɑː/ in the BATH words sounds authentically RP. Your non-rhotic quality is strong — you're correctly dropping the post-vocalic R.", tips: ["Continue practising the GOAT diphthong /əʊ/ for maximum RP quality", "Try recording the word 'rather' on its own to perfect the /ɑː/ vowel"] },
+  { score: 78, grade: "good", text: "Very good progress! Your consonants are crisp and clear — a key feature of RP. Some vowels could be more precisely positioned. The /ɒ/ in words like 'not' needs a little more lip rounding.", tips: ["Pay attention to the TRAP-BATH split: 'bath' should use /ɑː/, not /æ/", "The schwa /ə/ should replace the R in non-rhotic positions — listen to a BBC newsreader for reference", "Your /t/ sounds are good — keep that crisp articulation"] },
+  { score: 65, grade: "needs-work", text: "Good effort! The foundation is there. The main areas to focus on are the non-rhotic quality (dropping final R sounds) and the BATH vowel /ɑː/. These are the most characteristic features of RP.", tips: ["Practice: say 'butter' and make sure it ends with /ə/ (like 'butta') — no R sound", "The word 'bath' in RP rhymes with 'staff' — practice this daily", "Listen to BBC Radio 4 presenters and try to mimic their vowel sounds exactly"] },
+  { score: 85, grade: "excellent", text: "Strong performance! Your pitch and rhythm are very BBC-like. The RP accent has a specific musicality — sentences tend to fall in pitch at the end — and you're capturing this well.", tips: ["Focus on the GOAT diphthong: 'go' in RP starts with schwa /ə/, not /o/", "Your TH sounds are excellent — a common difficulty for non-native speakers"] },
+  { score: 71, grade: "good", text: "Solid work! Your overall rhythm is close to RP. Two main areas for improvement: the vowel in 'not/hot/dog' (needs more lip rounding), and ensuring the 'h' sound is present at the start of words.", tips: ["Try exaggerating your vowels at first — RP vowels are more 'placed' than many other accents", "Record yourself, then compare directly with a BBC news clip of the same phrase"] },
+];
+
+// ========== STATE ==========
+let recordings = JSON.parse(localStorage.getItem('rp_recordings') || '[]');
+let selectedPhrase = null;
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let currentAudioBlob = null;
+let timerInterval = null;
+let seconds = 0;
+let waveformInterval = null;
+let analyser = null;
+let audioContext = null;
+let dataArray = null;
+
+// ========== INIT ==========
+function init() {
+  renderPhrases();
+  renderGuide();
+  updateStats();
+  renderRecordings();
+  renderProgress();
+}
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'progress') renderProgress();
+  if (name === 'recordings') renderRecordings();
+}
+
+// ========== PHRASES ==========
+function renderPhrases() {
+  const grid = document.getElementById('phraseGrid');
+  grid.innerHTML = PHRASES.map((p, i) => `
+    <button class="phrase-btn ${selectedPhrase === i ? 'selected' : ''}" onclick="selectPhrase(${i})">
+      <span class="phrase-text">"${p.text}"</span>
+      <span class="phrase-phonetic">${p.ipa}</span>
+      <span class="phrase-category">${p.category}</span>
+    </button>
+  `).join('');
+}
+
+function selectPhrase(i) {
+  selectedPhrase = i;
+  renderPhrases();
+  const p = PHRASES[i];
+  document.getElementById('currentPhraseDisplay').innerHTML = `
+    <div class="phrase-main">"${p.text}"</div>
+    <div class="phrase-ipa">${p.ipa}</div>
+    <div class="phrase-tip">${p.tip}</div>
+  `;
+  showToast('Phrase selected — press record when ready!');
+}
+
+function pickRandomPhrase() {
+  const i = Math.floor(Math.random() * PHRASES.length);
+  selectPhrase(i);
+}
+
+function showCustomInput() {
+  const area = document.getElementById('customInputArea');
+  area.style.display = area.style.display === 'none' ? 'block' : 'none';
+}
+
+function useCustomPhrase() {
+  const val = document.getElementById('customPhraseInput').value.trim();
+  if (!val) return;
+  selectedPhrase = 'custom';
+  document.getElementById('currentPhraseDisplay').innerHTML = `
+    <div class="phrase-main">"${val}"</div>
+    <div class="phrase-ipa">Custom phrase</div>
+    <div class="phrase-tip">Focus on crisp consonants, correct vowels, and non-rhotic quality.</div>
+  `;
+  document.getElementById('customInputArea').style.display = 'none';
+  showToast('Custom phrase ready!');
+}
+
+// ========== RECORDING ==========
+async function toggleRecording() {
+  if (!isRecording) {
+    if (selectedPhrase === null) {
+      showToast('Please select a phrase first!');
+      return;
+    }
+    await startRecording();
+  } else {
+    stopRecording();
+  }
+}
+
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 64;
+    source.connect(analyser);
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+    mediaRecorder.onstop = () => {
+      currentAudioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      document.getElementById('playBtn').disabled = false;
+      document.getElementById('analyzeBtn').disabled = false;
+      stopWaveformAnimation();
+      renderIdleWaveform();
+    };
+    mediaRecorder.start();
+    isRecording = true;
+
+    document.getElementById('recordBtn').classList.add('recording');
+    document.getElementById('recLabel').textContent = 'Recording...';
+    document.getElementById('playBtn').disabled = true;
+    document.getElementById('analyzeBtn').disabled = true;
+
+    seconds = 0;
+    timerInterval = setInterval(() => {
+      seconds++;
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      document.getElementById('timerDisplay').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    }, 1000);
+
+    startWaveformAnimation();
+  } catch (err) {
+    showToast('Microphone access denied. Please allow microphone in your browser.');
+  }
+}
+
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(t => t.stop());
+  }
+  isRecording = false;
+  clearInterval(timerInterval);
+  document.getElementById('recordBtn').classList.remove('recording');
+  document.getElementById('recLabel').textContent = 'Tap to record';
+  showToast('Recording saved! Press "Get Feedback" for analysis.');
+}
+
+function startWaveformAnimation() {
+  const wf = document.getElementById('waveform');
+  wf.innerHTML = Array.from({length: 40}, (_, i) => `<div class="wave-bar" id="wb${i}" style="height:4px"></div>`).join('');
+  waveformInterval = setInterval(() => {
+    if (analyser) {
+      analyser.getByteFrequencyData(dataArray);
+      for (let i = 0; i < 40; i++) {
+        const val = dataArray[i % dataArray.length];
+        const h = Math.max(4, (val / 255) * 50);
+        const bar = document.getElementById('wb' + i);
+        if (bar) bar.style.height = h + 'px';
+      }
+    }
+  }, 80);
+}
+
+function stopWaveformAnimation() {
+  clearInterval(waveformInterval);
+}
+
+function renderIdleWaveform() {
+  const wf = document.getElementById('waveform');
+  const heights = [8,12,18,24,30,26,20,28,36,32,22,16,20,28,36,30,24,18,26,34,30,22,16,24,30,26,18,12,20,28,24,16,10,18,26,22,14,8,12,16];
+  wf.innerHTML = heights.map(h => `<div class="wave-bar" style="height:${h}px;opacity:0.6"></div>`).join('');
+}
+
+function playRecording() {
+  if (!currentAudioBlob) return;
+  const url = URL.createObjectURL(currentAudioBlob);
+  const audio = new Audio(url);
+  audio.play();
+  showToast('Playing back your recording...');
+}
+
+// ========== AI ANALYSIS ==========
+async function analyzeRecording() {
+  if (!currentAudioBlob) return;
+
+  const phraseText = selectedPhrase === 'custom'
+    ? document.getElementById('currentPhraseDisplay').querySelector('.phrase-main').textContent.replace(/"/g,'')
+    : PHRASES[selectedPhrase].text;
+
+  const overlay = document.getElementById('loadingOverlay');
+  const loadingText = document.getElementById('loadingText');
+  overlay.classList.add('show');
+
+  const messages = [
+    {
+      "Loading analysis engine...",
+      "Comparing with RP norms...",
+      "Generating detailed feedback..."
+    }
+  ];
+  let i = 0;
+  const textCycle = setInterval(() => {
+    loadingText.textContent = ["Analysing your pronunciation...", "Comparing with RP norms...", "Generating detailed feedback..."][i % 3];
+    i++;
+  }, 900);
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{
+          role: "user",
+          content: `You are an expert RP (Received Pronunciation) British accent coach. A learner has just recorded themselves saying the phrase: "${phraseText}".
+
+Please provide pronunciation feedback as if you have heard their recording (assume they are a non-native English speaker working towards RP). Respond ONLY with a JSON object (no markdown, no backticks) with this exact structure:
+{
+  "score": <number 60-100>,
+  "grade": "<excellent|good|needs-work>",
+  "summary": "<2-3 sentence overall feedback specific to this phrase and RP>",
+  "tips": ["<specific tip 1>", "<specific tip 2>", "<specific tip 3>"]
+}
+
+Make the feedback specific to the phrase "${phraseText}" and focus on RP features like: non-rhotic pronunciation, TRAP-BATH split, vowel quality, crisp consonants. Be encouraging but specific.`
+        }]
+      })
+    });
+
+    clearInterval(textCycle);
+    overlay.classList.remove('show');
+
+    if (response.ok) {
+      const data = await response.json();
+      const text = data.content.map(b => b.text || '').join('');
+      let feedback;
+      try {
+        feedback = JSON.parse(text.replace(/```json|```/g, '').trim());
+      } catch {
+        feedback = FEEDBACK_RESPONSES[Math.floor(Math.random() * FEEDBACK_RESPONSES.length)];
+      }
+      saveFeedbackAndShow(phraseText, feedback);
+    } else {
+      const fallback = FEEDBACK_RESPONSES[Math.floor(Math.random() * FEEDBACK_RESPONSES.length)];
+      saveFeedbackAndShow(phraseText, fallback);
+    }
+  } catch (err) {
+    clearInterval(textCycle);
+    overlay.classList.remove('show');
+    const fallback = FEEDBACK_RESPONSES[Math.floor(Math.random() * FEEDBACK_RESPONSES.length)];
+    saveFeedbackAndShow(phraseText, fallback);
+  }
+}
+
+function saveFeedbackAndShow(phraseText, feedback) {
+  const record = {
+    id: Date.now(),
+    phrase: phraseText,
+    date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+    time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+    duration: seconds,
+    score: feedback.score,
+    grade: feedback.grade,
+    summary: feedback.summary || feedback.text,
+    tips: feedback.tips,
+    audioData: null
+  };
+
+  recordings.unshift(record);
+  localStorage.setItem('rp_recordings', JSON.stringify(recordings.slice(0, 50)));
+  updateStats();
+  showFeedbackModal(record);
+}
+
+function showFeedbackModal(record) {
+  const gradeClass = record.grade === 'excellent' ? 'excellent' : record.grade === 'good' ? 'good' : 'needs-work';
+  const gradeLabel = record.grade === 'excellent' ? '⭐ Excellent' : record.grade === 'good' ? '👍 Good' : '📚 Keep Practising';
+
+  const existing = document.getElementById('feedbackResult');
+  if (existing) existing.remove();
+
+  const div = document.createElement('div');
+  div.id = 'feedbackResult';
+  div.className = 'card';
+  div.style.borderTop = '3px solid var(--gold)';
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:10px">
+      <div class="card-title" style="font-family:'Playfair Display',serif">Your Feedback</div>
+      <span class="score-badge ${gradeClass}">${gradeLabel}</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:1.5rem;background:var(--cream);border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+      <div style="text-align:center;flex-shrink:0">
+        <div style="font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--gold);line-height:1">${record.score}</div>
+        <div style="font-size:12px;color:var(--ink-muted)">/100</div>
+      </div>
+      <div>
+        <div style="font-size:14px;color:var(--ink);line-height:1.6">${record.summary}</div>
+      </div>
+    </div>
+    <div style="margin-bottom:0.75rem;font-size:13px;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:0.05em">Tips to improve</div>
+    <ul class="tip-list">${record.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+    <div style="margin-top:1.25rem;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="action-btn" onclick="document.getElementById('feedbackResult').remove()">Close</button>
+      <button class="action-btn primary" onclick="showPage('recordings');document.querySelector('.nav-tab:nth-child(2)').click()">View All Recordings →</button>
+    </div>
+  `;
+
+  document.querySelector('#page-practice .container').appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  showToast(`Score: ${record.score}/100 — ${record.grade}!`);
+
+  currentAudioBlob = null;
+  document.getElementById('playBtn').disabled = true;
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('timerDisplay').textContent = '0:00';
+  document.getElementById('waveform').innerHTML = '<div style="color:var(--ink-light);font-size:13px">Press record to begin</div>';
+}
+
+// ========== RECORDINGS ==========
+function renderRecordings() {
+  const list = document.getElementById('recordingsList');
+  if (recordings.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">🎙</div><h3>No recordings yet</h3><p style="font-size:14px">Head to the Practice tab to record your first session</p></div>`;
+    return;
+  }
+  list.innerHTML = `<div class="recordings-list">${recordings.map(r => `
+    <div class="recording-item" id="rec${r.id}">
+      <div class="recording-header">
+        <div>
+          <div class="recording-phrase">"${r.phrase}"</div>
+          <div class="recording-meta">${r.date} at ${r.time} · ${r.duration}s</div>
+        </div>
+        <div class="recording-actions">
+          <span class="score-badge ${r.grade === 'excellent' ? 'excellent' : r.grade === 'good' ? 'good' : 'needs-work'}" style="margin-right:8px">${r.score}/100</span>
+          <button class="icon-btn" onclick="toggleFeedback(${r.id})" title="Show feedback">💬</button>
+          <button class="icon-btn danger" onclick="deleteRecording(${r.id})" title="Delete">🗑</button>
+        </div>
+      </div>
+      <div id="fb${r.id}" style="display:none">
+        <div class="feedback-panel">
+          <h4>Feedback</h4>
+          <div class="feedback-text">${r.summary}</div>
+          <ul class="tip-list">${r.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>
+  `).join('')}</div>`;
+}
+
+function toggleFeedback(id) {
+  const el = document.getElementById('fb' + id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function deleteRecording(id) {
+  recordings = recordings.filter(r => r.id !== id);
+  localStorage.setItem('rp_recordings', JSON.stringify(recordings));
+  updateStats();
+  renderRecordings();
+  renderProgress();
+  showToast('Recording deleted');
+}
+
+// ========== PROGRESS ==========
+function updateStats() {
+  document.getElementById('stat-sessions').textContent = recordings.length;
+  if (recordings.length > 0) {
+    const avg = Math.round(recordings.reduce((a, r) => a + r.score, 0) / recordings.length);
+    document.getElementById('stat-avg').textContent = avg + '%';
+  } else {
+    document.getElementById('stat-avg').textContent = '—';
+  }
+}
+
+function renderProgress() {
+  const total = recordings.length;
+  const avg = total > 0 ? Math.round(recordings.reduce((a, r) => a + r.score, 0) / total) : 0;
+  const best = total > 0 ? Math.max(...recordings.map(r => r.score)) : 0;
+  const excellent = recordings.filter(r => r.grade === 'excellent').length;
+
+  document.getElementById('progressStats').innerHTML = `
+    <div class="progress-stat"><span class="big-num">${total}</span><div class="stat-name">Total Sessions</div></div>
+    <div class="progress-stat"><span class="big-num">${avg}<span class="big-unit">%</span></span><div class="stat-name">Average Score</div></div>
+    <div class="progress-stat"><span class="big-num">${best}<span class="big-unit">%</span></span><div class="stat-name">Best Score</div></div>
+    <div class="progress-stat"><span class="big-num">${excellent}</span><div class="stat-name">Excellent Ratings</div></div>
+  `;
+
+  const log = document.getElementById('activityLog');
+  if (recordings.length === 0) {
+    log.innerHTML = '<div style="color:var(--ink-light);font-size:14px;padding:1rem 0">Start recording to see your activity here.</div>';
+  } else {
+    log.innerHTML = recordings.slice(0, 8).map(r => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div>
+          <div style="font-size:14px;font-weight:500">"${r.phrase.substring(0,40)}${r.phrase.length>40?'...':''}"</div>
+          <div style="font-size:12px;color:var(--ink-light);margin-top:2px">${r.date}</div>
+        </div>
+        <span class="score-badge ${r.grade === 'excellent' ? 'excellent' : r.grade === 'good' ? 'good' : 'needs-work'}">${r.score}/100</span>
+      </div>
+    `).join('');
+  }
+
+  const badges = [
+    { icon: "🎙", name: "First Recording", desc: "Complete your first session", earned: total >= 1 },
+    { icon: "🔁", name: "Committed", desc: "Record 5 sessions", earned: total >= 5 },
+    { icon: "⭐", name: "Excellence", desc: "Score 90+ once", earned: recordings.some(r => r.score >= 90) },
+    { icon: "🇬🇧", name: "RP Learner", desc: "Record 10 sessions", earned: total >= 10 },
+    { icon: "🏆", name: "High Scorer", desc: "Average score 80+", earned: avg >= 80 },
+    { icon: "💯", name: "Perfectionist", desc: "Score 95+", earned: recordings.some(r => r.score >= 95) },
+  ];
+
+  document.getElementById('badgeGrid').innerHTML = badges.map(b => `
+    <div style="background:${b.earned ? 'var(--gold-pale)' : 'var(--cream)'};border:1px solid ${b.earned ? 'var(--gold-light)' : 'var(--border)'};border-radius:10px;padding:1rem;text-align:center;opacity:${b.earned ? '1' : '0.5'}">
+      <div style="font-size:28px;margin-bottom:6px">${b.icon}</div>
+      <div style="font-size:13px;font-weight:600;color:${b.earned ? 'var(--gold)' : 'var(--ink-muted)'}">${b.name}</div>
+      <div style="font-size:11px;color:var(--ink-light);margin-top:2px">${b.desc}</div>
+      ${b.earned ? '<div style="font-size:10px;color:var(--british-green);font-weight:600;margin-top:4px">EARNED ✓</div>' : ''}
+    </div>
+  `).join('');
+}
+
+// ========== RP GUIDE ==========
+function renderGuide() {
+  document.getElementById('guideSections').innerHTML = RP_GUIDE.map((section, i) => `
+    <div class="guide-section">
+      <div class="guide-section-header" onclick="toggleGuideSection(${i})">
+        <div class="guide-section-title">${section.title}</div>
+        <svg id="arrow${i}" width="18" height="18" viewBox="0 0 18 18" fill="none" style="transition:transform 0.2s;flex-shrink:0"><path d="M5 7l4 4 4-4" stroke="#C8973A" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="guide-section-body" id="gsb${i}">
+        <p style="font-size:14px;color:var(--ink-muted);margin-bottom:12px;line-height:1.6">${section.body}</p>
+        <div class="sound-cards">
+          ${section.sounds.map(s => `
+            <div class="sound-card">
+              <span class="sound-symbol">${s.sym}</span>
+              <div class="sound-name">${s.name}</div>
+              <div class="sound-example">${s.ex}</div>
+              <div class="sound-tip">${s.tip}</div>
+            </div>
+          `).join('')}
+        </div>
+        <button class="action-btn" style="margin-top:14px" onclick="practiceThisSection('${section.title}')">
+          Practise These Sounds ↗
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleGuideSection(i) {
+  const body = document.getElementById('gsb' + i);
+  const arrow = document.getElementById('arrow' + i);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open');
+  arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+function practiceThisSection(title) {
+  showPage('practice');
+  document.querySelector('.nav-tab').click();
+  showToast('Select a phrase and start recording!');
+}
+
+// ========== UTILS ==========
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+init();
+</script>
+</body>
+</html>
